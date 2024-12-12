@@ -38,6 +38,8 @@ INSERT INTO users (first_name, last_name, username, email, password, role) VALUE
 
 INSERT INTO job_posts (title, description) VALUES 
 ('Network admin', 'We are looking for an experienced game network admin.'),
+('Subbet Network admin', 'We are looking for an experienced subnet network admin.'),
 ('Network Engineer', 'Looking for a network engineer with fresh ideas.');
+
 
 ALTER TABLE applications ADD COLUMN name VARCHAR(255) NOT NULL AFTER applicant_id;
