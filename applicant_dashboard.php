@@ -21,104 +21,78 @@ $job_posts = $stmt->fetchAll();
     <title>Applicant Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 
-        body {
-            font-family: 'Press Start 2P', cursive;
-            margin: 0;
-            padding: 0;
-            background: url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/0c0be316-9a49-488b-a869-1449ee6ea7f5/d6pdq8v-615bce4b-5acc-4bb6-923f-91bf942f3123.jpg/v1/fill/w_1024,h_647,q_75,strp/minecraft_wallpapers_hd_by_gamer_otaku_musica_d6pdq8v-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NjQ3IiwicGF0aCI6IlwvZlwvMGMwYmUzMTYtOWE0OS00ODhiLWE4NjktMTQ0OWVlNmVhN2Y1XC9kNnBkcTh2LTYxNWJjZTRiLTVhY2MtNGJiNi05MjNmLTkxYmY5NDJmMzEyMy5qcGciLCJ3aWR0aCI6Ijw9MTAyNCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.m8HnjORRklm_kYV_KBmjlL1ft5yq2N9iFO4zjWggYK4') no-repeat center center fixed;
-            background-size: cover;
-        }
+    body {
+        font-family: 'Orbitron', sans-serif;
+        margin: 0;
+        padding: 0;
+        background: url('https://st3.depositphotos.com/1008648/31875/i/450/depositphotos_318753496-stock-photo-abstract-connection-blue-background-network.jpg') no-repeat center center fixed;
+        background-size: cover;
+        color: #fcfafa; /* Changed font color to white */
+    }
 
-        h1 {
-            text-align: center;
-            color: #2ecc71;
-            text-shadow: 0 0 10px #27ae60, 0 0 20px #2ecc71, 0 0 30px #1abc9c;
-            margin-bottom: 20px;
-        }
+    .hero-section {
+        background: rgba(0, 0, 0, 0.8);
+        padding: 60px 0;
+        border: 3px solid #03a9f4;
+        box-shadow: 0 0 15px #03a9f4, inset 0 0 15px #03a9f4;
+    }
 
-        .container {
-            margin-top: 50px;
-            background: rgba(0, 0, 0, 0.8);
-            border: 3px solid #27ae60;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 0 15px #27ae60, inset 0 0 15px #2ecc71;
-        }
+    .hero-section h1 {
+        font-size: 2.5rem;
+        color: #ffffff; /* Changed font color to white */
+        text-shadow: 0 0 10px #03a9f4, 0 0 20px #03a9f4, 0 0 30px #03a9f4;
+    }
 
-        .btn {
-            font-family: 'Press Start 2P', cursive;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            text-shadow: 0 0 10px #34495e;
-            transition: 0.3s ease-in-out;
-        }
+    .hero-section p {
+        font-size: 1.2rem;
+        color: #ffffff; /* Changed font color to white */
+        text-shadow: 0 0 10px #66d9ef, 0 0 20px #66d9ef, 0 0 30px #66d9ef;
+    }
 
-        .btn-secondary {
-            background-color: #3498db;
-        }
+    .category-buttons a {
+        font-family: 'Orbitron', sans-serif;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #03a9f4;
+        color: #fcfafa; /* Changed font color to white */
+    }
 
-        .btn-secondary:hover {
-            background-color: #2980b9;
-            box-shadow: 0 0 10px #3498db, 0 0 20px #2980b9;
-        }
+    .category-buttons a:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 20px #03a9f4;
+    }
 
-        .btn-info {
-            background-color: #9b59b6;
-        }
+    .btn-success {
+        background-color: #03a9f4;
+        border: none;
+        color: #ffffff; /* Changed font color to white */
+    }
 
-        .btn-info:hover {
-            background-color: #8e44ad;
-            box-shadow: 0 0 10px #9b59b6, 0 0 20px #8e44ad;
-        }
+    .btn-success:hover {
+        background-color: #0288d1;
+    }
 
-        table {
-            background-color: #34495e;
-            border-collapse: collapse;
-            width: 100%;
-            margin-top: 20px;
-            border: 2px solid #2ecc71;
-            box-shadow: 0 0 15px #27ae60;
-        }
+    .btn-warning {
+        background-color: #66d9ef;
+        border: none;
+        color: #fcfafa; /* Changed font color to white */
+    }
 
-        th, td {
-            padding: 15px;
-            text-align: center;
-            border: 1px solid #2ecc71;
-        }
+    .btn-warning:hover {
+        background-color: #4db6ac;
+    }
 
-        th {
-            background-color: #2c3e50;
-            color: #2ecc71;
-        }
-
-        tr:nth-child(even) {
-            background-color: #2c3e50;
-        }
-
-        tr:hover {
-            background-color: #27ae60;
-            color: white;
-        }
-
-        .btn-primary {
-            background-color: #e74c3c;
-        }
-
-        .btn-primary:hover {
-            background-color: #c0392b;
-            box-shadow: 0 0 10px #e74c3c, 0 0 20px #c0392b;
-        }
-
-        h3 {
-            color: #f1c40f; 
-            text-shadow: 0 0 10px #f39c12, 0 0 20px #f1c40f, 0 0 30px #f1c40f;
-            margin-bottom: 20px; 
-        }
-    </style>
+    footer {
+        background: rgba(0, 0, 0, 0.8);
+        color: #fcfafa; /* Changed font color to white */
+        text-shadow: 0 0 10px #03a9f4, 0 0 20px #03a9f4;
+        border-top: 3px solid #03a9f4;
+        padding: 20px 0;
+        margin-top: 50px;
+    }
+</style>
 </head>
 <body>
     <div class="container">
