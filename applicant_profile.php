@@ -1,20 +1,28 @@
 <?php
-session_start();
-
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Applicant') {
-    header("Location: login_applicant.php");
-    exit();
-}
-
 require_once 'core/dbConfig.php';
 
-$applicant_id = $_SESSION['user_id'];
-$stmt = $pdo->prepare("SELECT a.job_post_id, j.title, a.resume, a.status, a.date_submitted FROM applications a 
-                        JOIN job_posts j ON a.job_post_id = j.id WHERE a.applicant_id = :applicant_id");
-$stmt->bindParam(':applicant_id', $applicant_id);
-$stmt->execute();
-$applications = $stmt->fetchAll();
+session_start();
+$error_message = '';
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ? AND role = 'HR'");
+    $stmt->execute([$username]);
+    $user = $stmt->fetch();
+
+    if ($user && $password === 'HR') {
+ 
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['role'] = $user['role'];
+        $_SESSION['username'] = $user['username'];
+        header("Location: employee_dashboard.php");
+        exit();
+    } else {
+        $error_message = "Invalid username or password.";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -22,117 +30,98 @@ $applications = $stmt->fetchAll();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Profile</title>
+    <title>Employee Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-        <style>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 
-        body {
-            background-color: #f4f4f9;
-            font-family: 'Arial', sans-serif;
-        }
-        
-        .applicant-card {
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-            background-color: #fff;
-        }
-        
-        .applicant-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .applicant-card .card-body {
-            padding: 20px;
-        }
+    body {
+        font-family: 'Orbitron', sans-serif;
+        margin: 0;
+        padding: 0;
+        background: url('https://st3.depositphotos.com/1008648/31875/i/450/depositphotos_318753496-stock-photo-abstract-connection-blue-background-network.jpg') no-repeat center center fixed;
+        background-size: cover;
+        color: #00ffea;
+    }
 
-        .applicant-card .card-title {
-            font-size: 1.3rem;
-            font-weight: bold;
-        }
+    .hero-section {
+        background: rgba(0, 0, 0, 0.8);
+        padding: 60px 0;
+        border: 3px solid #03a9f4;
+        box-shadow: 0 0 15px #03a9f4, inset 0 0 15px #03a9f4;
+    }
 
-        .applicant-card .card-subtitle {
-            font-size: 1.1rem;
-            color: #555;
-        }
+    .hero-section h1 {
+        font-size: 2.5rem;
+        color: #03a9f4;
+        text-shadow: 0 0 10px #03a9f4, 0 0 20px #03a9f4, 0 0 30px #03a9f4;
+    }
 
-        .applicant-card .card-text {
-            margin-bottom: 15px;
-        }
+    .hero-section p {
+        font-size: 1.2rem;
+        color: #66d9ef;
+        text-shadow: 0 0 10px #66d9ef, 0 0 20px #66d9ef, 0 0 30px #66d9ef;
+    }
 
-        .applicant-card .btn {
-            font-size: 0.9rem;
-            width: 100%;
-            margin-top: 10px;
-        }
+    .category-buttons a {
+        font-family: 'Orbitron', sans-serif;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #03a9f4;
+    }
 
-        .badge {
-            font-weight: bold;
-        }
+    .category-buttons a:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 20px #03a9f4;
+    }
 
-        .container {
-            max-width: 1200px;
-        }
+    .btn-success {
+        background-color: #03a9f4;
+        border: none;
+    }
 
-        .header {
-            background-color: #007BFF;
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+    .btn-success:hover {
+        background-color: #0288d1;
+    }
 
-        .header h1 {
-            font-size: 2.5rem;
-        }
+    .btn-warning {
+        background-color: #66d9ef;
+        border: none;
+    }
 
-        .employee-dashboard-btn {
-            background-color: #28a745;
-            color: white;
-            padding: 12px 20px;
-            font-size: 1.2rem;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s ease;
-        }
+    .btn-warning:hover {
+        background-color: #4db6ac;
+    }
 
-        .employee-dashboard-btn:hover {
-            background-color: #218838;
-        }
-
-        .applicant-card p {
-            font-size: 1rem;
-            line-height: 1.6;
-        }
-    </style>
+    footer {
+        background: rgba(0, 0, 0, 0.8);
+        color: #03a9f4;
+        text-shadow: 0 0 10px #03a9f4, 0 0 20px #03a9f4;
+        border-top: 3px solid #03a9f4;
+        padding: 20px 0;
+        margin-top: 50px;
+    }
+</style>
 </head>
-
 <body>
     <div class="container">
-        <h1>Your Profile</h1>
-        <p>Below are the job applications you have submitted.</p>
-
-        <ul class="list-group">
-            <?php foreach ($applications as $application): ?>
-                <li class="list-group-item">
-                    <h5><?php echo htmlspecialchars($application['title']); ?></h5>
-                    <p>Status: <?php echo htmlspecialchars($application['status']); ?></p>
-                    <p>Submitted on: <?php echo htmlspecialchars($application['date_submitted']); ?></p>
-                    <p>Resume: 
-                        <?php if ($application['resume']): ?>
-                            <a href="uploads/Name johnny yes papa.pdf" target="_blank">View PDF</a>
-                        <?php else: ?>
-                            No resume submitted
-                        <?php endif; ?>
-                    </p>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-
-        <a href="applicant_dashboard.php" class="btn btn-secondary mt-4">Back to Dashboard</a>
+        <h1 class="my-5 text-center">Employee Login</h1>
+        
+        <?php if (!empty($error_message)) { ?>
+            <div class="alert alert-danger"><?php echo $error_message; ?></div>
+        <?php } ?>
+        
+        <form method="POST">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" name="username" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
